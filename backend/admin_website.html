@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jalmitra Admin Dashboard - Customer Inquiries</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: #667eea;
+        }
+
+        .stat-card i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .stat-card p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .filters-section {
+            padding: 30px;
+            background: white;
+            border-bottom: 1px solid #eee;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            position: relative;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .filter-group label {
+            position: absolute;
+            left: 15px;
+            top: -10px;
+            background: white;
+            padding: 0 8px;
+            font-size: 0.9rem;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .inquiries-section {
+            padding: 30px;
+        }
+
+        .inquiries-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .inquiries-header h2 {
+            color: #2c3e50;
+            font-size: 1.8rem;
+        }
+
+        .export-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .inquiry-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            border-left: 5px solid #667eea;
+        }
+
+        .inquiry-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .inquiry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .inquiry-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .inquiry-meta {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .inquiry-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-new {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .status-in-progress {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .status-resolved {
+            background: #e8f5e8;
+            color: #2e7d32;
+        }
+
+        .inquiry-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-item i {
+            color: #667eea;
+            font-size: 1.2rem;
+            width: 20px;
+        }
+
+        .detail-item strong {
+            color: #2c3e50;
+            min-width: 100px;
+        }
+
+        .inquiry-message {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .inquiry-message h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .inquiry-message p {
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .inquiry-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-reply {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-reply:hover {
+            background: #5a6fd8;
+        }
+
+        .btn-mark-resolved {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-mark-resolved:hover {
+            background: #218838;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination button {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pagination button:hover,
+        .pagination button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .no-inquiries {
+            text-align: center;
+            padding: 60px 20px;
+            color: #7f8c8d;
+        }
+
+        .no-inquiries i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #667eea;
+        }
+
+        .loading i {
+            font-size: 2rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+            
+            .inquiries-header {
+                flex-direction: column;
+                gap: 20px;
+                align-items: stretch;
+            }
+            
+            .inquiry-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .inquiry-actions {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <h1><i class="bi bi-shield-check"></i> Jalmitra Admin Dashboard</h1>
+            <p>Customer Inquiry Management System</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="bi bi-envelope-fill"></i>
+                <h3 id="totalInquiries">0</h3>
+                <p>Total Inquiries</p>
+            </div>
+            <div class="stat-card">
+                <i class="bi bi-clock-fill"></i>
+                <h3 id="newInquiries">0</h3>
+                <p>New Inquiries</p>
+            </div>
+            <div class="stat-card">
+                <i class="bi bi-gear-fill"></i>
+                <h3 id="inProgressInquiries">0</h3>
+                <p>In Progress</p>
+            </div>
+            <div class="stat-card">
+                <i class="bi bi-check-circle-fill"></i>
+                <h3 id="resolvedInquiries">0</h3>
+                <p>Resolved</p>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Status</label>
+                    <select id="statusFilter">
+                        <option value="">All Status</option>
+                        <option value="new">New</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Date Range</label>
+                    <input type="date" id="dateFrom">
+                </div>
+                <div class="filter-group">
+                    <label>To Date</label>
+                    <input type="date" id="dateTo">
+                </div>
+                <div class="filter-group">
+                    <label>Search</label>
+                    <input type="text" id="searchFilter" placeholder="Search by name, email, or company">
+                </div>
+            </div>
+        </div>
+
+        <!-- Inquiries Section -->
+        <div class="inquiries-section">
+            <div class="inquiries-header">
+                <h2>Customer Inquiries</h2>
+                <button class="export-btn" onclick="exportInquiries()">
+                    <i class="bi bi-download"></i>
+                    Export to CSV
+                </button>
+            </div>
+
+            <div id="inquiriesContainer">
+                <div class="loading">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    <p>Loading inquiries...</p>
+                </div>
+            </div>
+
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock data - replace with actual API calls
+        let inquiries = [
+            {
+                id: 1,
+                fullName: "Rajesh Patel",
+                email: "rajesh.patel@gmail.com",
+                phone: "+91 9876543210",
+                company: "Gujarat Water Board",
+                jobTitle: "Water Management Officer",
+                country: "India",
+                state: "Gujarat",
+                industry: "Water Management",
+                message: "We are interested in implementing Jalmitra for our water cleaning operations in Ahmedabad. Can you provide details about deployment and costs?",
+                status: "new",
+                date: "2025-01-15",
+                time: "10:30 AM"
+            },
+            {
+                id: 2,
+                fullName: "Priya Sharma",
+                email: "priya.sharma@cleanwater.com",
+                phone: "+91 9876543211",
+                company: "Clean Water Solutions",
+                jobTitle: "Project Manager",
+                country: "India",
+                state: "Maharashtra",
+                industry: "Environmental Services",
+                message: "Looking for smart water cleaning solutions for our municipal clients. Would like to schedule a demo for Jalmitra.",
+                status: "in-progress",
+                date: "2025-01-14",
+                time: "2:15 PM"
+            },
+            {
+                id: 3,
+                fullName: "Dr. Amit Kumar",
+                email: "amit.kumar@university.edu",
+                phone: "+91 9876543212",
+                company: "Environmental Research Institute",
+                jobTitle: "Research Director",
+                country: "India",
+                state: "Karnataka",
+                industry: "Research & Development",
+                message: "Interested in partnering for research on autonomous water cleaning systems. Can we discuss collaboration opportunities?",
+                status: "resolved",
+                date: "2025-01-13",
+                time: "4:45 PM"
+            },
+            {
+                id: 4,
+                fullName: "Sarah Johnson",
+                email: "sarah@watertech.com",
+                phone: "+1 555-123-4567",
+                company: "WaterTech International",
+                jobTitle: "Business Development Manager",
+                country: "USA",
+                state: "California",
+                industry: "Water Technology",
+                message: "We represent several municipalities in California interested in smart water cleaning technology. Please provide technical specifications and pricing.",
+                status: "new",
+                date: "2025-01-12",
+                time: "9:20 AM"
+            },
+            {
+                id: 5,
+                fullName: "Mohammed Al-Rashid",
+                email: "m.alrashid@dubai.gov",
+                phone: "+971 50 123 4567",
+                company: "Dubai Municipality",
+                jobTitle: "Environmental Engineer",
+                country: "UAE",
+                state: "Dubai",
+                industry: "Government",
+                message: "Dubai Municipality is evaluating smart water cleaning solutions for our waterways. We would like to schedule a virtual demonstration.",
+                status: "in-progress",
+                date: "2025-01-11",
+                time: "1:30 PM"
+            }
+        ];
+
+        let filteredInquiries = [...inquiries];
+        let currentPage = 1;
+        const itemsPerPage = 3;
+
+        // Initialize dashboard
+        function initDashboard() {
+            updateStats();
+            renderInquiries();
+            setupEventListeners();
+        }
+
+        // Update statistics
+        function updateStats() {
+            const total = inquiries.length;
+            const newCount = inquiries.filter(i => i.status === 'new').length;
+            const inProgressCount = inquiries.filter(i => i.status === 'in-progress').length;
+            const resolvedCount = inquiries.filter(i => i.status === 'resolved').length;
+
+            document.getElementById('totalInquiries').textContent = total;
+            document.getElementById('newInquiries').textContent = newCount;
+            document.getElementById('inProgressInquiries').textContent = inProgressCount;
+            document.getElementById('resolvedInquiries').textContent = resolvedCount;
+        }
+
+        // Render inquiries
+        function renderInquiries() {
+            const container = document.getElementById('inquiriesContainer');
+            
+            if (filteredInquiries.length === 0) {
+                container.innerHTML = `
+                    <div class="no-inquiries">
+                        <i class="bi bi-inbox"></i>
+                        <h3>No inquiries found</h3>
+                        <p>Try adjusting your filters or check back later.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageInquiries = filteredInquiries.slice(startIndex, endIndex);
+
+            container.innerHTML = pageInquiries.map(inquiry => `
+                <div class="inquiry-card">
+                    <div class="inquiry-header">
+                        <div>
+                            <div class="inquiry-title">${inquiry.fullName}</div>
+                            <div class="inquiry-meta">
+                                <i class="bi bi-calendar"></i> ${inquiry.date} at ${inquiry.time}
+                            </div>
+                        </div>
+                        <div class="inquiry-status status-${inquiry.status}">
+                            ${inquiry.status.replace('-', ' ')}
+                        </div>
+                    </div>
+                    
+                    <div class="inquiry-details">
+                        <div class="detail-item">
+                            <i class="bi bi-envelope"></i>
+                            <strong>Email:</strong>
+                            <span>${inquiry.email}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="bi bi-telephone"></i>
+                            <strong>Phone:</strong>
+                            <span>${inquiry.phone}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="bi bi-building"></i>
+                            <strong>Company:</strong>
+                            <span>${inquiry.company}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="bi bi-person-badge"></i>
+                            <strong>Job Title:</strong>
+                            <span>${inquiry.jobTitle}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="bi bi-geo-alt"></i>
+                            <strong>Location:</strong>
+                            <span>${inquiry.state}, ${inquiry.country}</span>
+                        </div>
+                        <div class="detail-item">
+                            <i class="bi bi-briefcase"></i>
+                            <strong>Industry:</strong>
+                            <span>${inquiry.industry}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="inquiry-message">
+                        <h4><i class="bi bi-chat-left-text"></i> Message</h4>
+                        <p>${inquiry.message}</p>
+                    </div>
+                    
+                    <div class="inquiry-actions">
+                        <button class="action-btn btn-reply" onclick="replyToInquiry(${inquiry.id})">
+                            <i class="bi bi-reply"></i> Reply
+                        </button>
+                        ${inquiry.status !== 'resolved' ? `
+                            <button class="action-btn btn-mark-resolved" onclick="markAsResolved(${inquiry.id})">
+                                <i class="bi bi-check-circle"></i> Mark Resolved
+                            </button>
+                        ` : ''}
+                        <button class="action-btn btn-delete" onclick="deleteInquiry(${inquiry.id})">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            renderPagination();
+        }
+
+        // Render pagination
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredInquiries.length / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let paginationHTML = '';
+            
+            // Previous button
+            if (currentPage > 1) {
+                paginationHTML += `<button onclick="changePage(${currentPage - 1})"><i class="bi bi-chevron-left"></i></button>`;
+            }
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                paginationHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+            
+            // Next button
+            if (currentPage < totalPages) {
+                paginationHTML += `<button onclick="changePage(${currentPage + 1})"><i class="bi bi-chevron-right"></i></button>`;
+            }
+            
+            pagination.innerHTML = paginationHTML;
+        }
+
+        // Change page
+        function changePage(page) {
+            currentPage = page;
+            renderInquiries();
+        }
+
+        // Apply filters
+        function applyFilters() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+
+            filteredInquiries = inquiries.filter(inquiry => {
+                const matchesStatus = !statusFilter || inquiry.status === statusFilter;
+                const matchesDateFrom = !dateFrom || new Date(inquiry.date) >= new Date(dateFrom);
+                const matchesDateTo = !dateTo || new Date(inquiry.date) <= new Date(dateTo);
+                const matchesSearch = !searchFilter || 
+                    inquiry.fullName.toLowerCase().includes(searchFilter) ||
+                    inquiry.email.toLowerCase().includes(searchFilter) ||
+                    inquiry.company.toLowerCase().includes(searchFilter) ||
+                    inquiry.message.toLowerCase().includes(searchFilter);
+
+                return matchesStatus && matchesDateFrom && matchesDateTo && matchesSearch;
+            });
+
+            currentPage = 1;
+            renderInquiries();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('statusFilter').addEventListener('change', applyFilters);
+            document.getElementById('dateFrom').addEventListener('change', applyFilters);
+            document.getElementById('dateTo').addEventListener('change', applyFilters);
+            document.getElementById('searchFilter').addEventListener('input', applyFilters);
+        }
+
+        // Action functions
+        function replyToInquiry(id) {
+            const inquiry = inquiries.find(i => i.id === id);
+            if (inquiry) {
+                // Open email client or show reply modal
+                window.location.href = `mailto:${inquiry.email}?subject=Re: Your Jalmitra Inquiry&body=Dear ${inquiry.fullName},%0D%0A%0D%0AThank you for your inquiry about Jalmitra...`;
+            }
+        }
+
+        function markAsResolved(id) {
+            const inquiry = inquiries.find(i => i.id === id);
+            if (inquiry) {
+                inquiry.status = 'resolved';
+                updateStats();
+                renderInquiries();
+            }
+        }
+
+        function deleteInquiry(id) {
+            if (confirm('Are you sure you want to delete this inquiry?')) {
+                inquiries = inquiries.filter(i => i.id !== id);
+                filteredInquiries = filteredInquiries.filter(i => i.id !== id);
+                updateStats();
+                renderInquiries();
+            }
+        }
+
+        function exportInquiries() {
+            const csvContent = "data:text/csv;charset=utf-8," + 
+                "ID,Name,Email,Phone,Company,Job Title,Country,State,Industry,Message,Status,Date,Time\n" +
+                filteredInquiries.map(i => 
+                    `${i.id},"${i.fullName}","${i.email}","${i.phone}","${i.company}","${i.jobTitle}","${i.country}","${i.state}","${i.industry}","${i.message}","${i.status}","${i.date}","${i.time}"`
+                ).join('\n');
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'jalmitra_inquiries.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Initialize dashboard when page loads
+        document.addEventListener('DOMContentLoaded', initDashboard);
+    </script>
+</body>
+</html>

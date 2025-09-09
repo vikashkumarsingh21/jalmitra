@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Live Data | Jalmitra</title>
+  <link rel="stylesheet" href="css/live.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+
+
+</head>
+<body>
+  <!-- Wrap everything for sticky footer -->
+  <div class="wrapper">
+
+<!-- Navbar -->
+<header class="navbar">
+  <div class="nav-container">
+    <a href="index.html" class="brand">
+      <!-- Round Logo -->
+      <div class="round-logo">
+        <img src="asset/Jalmitra Logo.png" alt="Jalmitra Logo" class="logo" />
+      </div>
+      <span class="brand-name">Jalmitra</span>
+    </a>
+    <nav class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="services.html">Services</a>
+      <a href="live.html">Live Data</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<!-- Live Status Banner -->
+<section class="live-status-banner">
+  <div class="container">
+    <div class="status-content">
+      <div class="live-indicator">
+        <div class="pulse-dot"></div>
+        <span class="live-text">LIVE</span>
+      </div>
+      <div class="status-info">
+        <h3>System Status: <span class="status-active">Active</span></h3>
+        <p>All sensors operational • Data streaming in real-time</p>
+      </div>
+      <div class="last-update">
+        <i class="bi bi-clock"></i>
+        <span>Last Updated: <span id="last-update-time">--:--:--</span></span>
+        <div class="update-frequency">Auto-refresh every 5 seconds</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Live Sensor Section -->
+<section class="sensor-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Environmental Monitoring Dashboard</h2>
+      <p>Real-time sensor data from Jalmitra's advanced water quality monitoring system</p>
+      <div class="data-controls">
+        <button class="control-btn" id="pause-btn">
+          <i class="bi bi-pause"></i> Pause Updates
+        </button>
+        <button class="control-btn" id="refresh-btn">
+          <i class="bi bi-arrow-clockwise"></i> Refresh Now
+        </button>
+        <button class="control-btn" id="export-btn">
+          <i class="bi bi-download"></i> Export Data
+        </button>
+      </div>
+    </div>
+    
+    <div class="sensor-grid">
+      <div class="sensor-box temperature-sensor">
+        <div class="sensor-header">
+          <i class="bi bi-thermometer-sun sensor-icon"></i>
+          <div class="sensor-info">
+            <h3>Temperature</h3>
+            <div class="sensor-status status-normal">Normal</div>
+          </div>
+        </div>
+        <div class="sensor-value">
+          <span class="value" id="temperature-value">27</span>
+          <span class="unit">°C</span>
+        </div>
+        <div class="sensor-trend">
+          <i class="bi bi-graph-up trend-icon"></i>
+          <span class="trend-text">+0.2°C from last hour</span>
+        </div>
+        <div class="sensor-range">
+          <span class="range-label">Normal Range: 20-30°C</span>
+        </div>
+      </div>
+
+      <div class="sensor-box humidity-sensor">
+        <div class="sensor-header">
+          <i class="bi bi-moisture sensor-icon"></i>
+          <div class="sensor-info">
+            <h3>Humidity</h3>
+            <div class="sensor-status status-normal">Normal</div>
+          </div>
+        </div>
+        <div class="sensor-value">
+          <span class="value" id="humidity-value">62</span>
+          <span class="unit">%</span>
+        </div>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill" id="humidity-progress" style="width: 62%"></div>
+          </div>
+        </div>
+        <div class="sensor-range">
+          <span class="range-label">Optimal Range: 40-70%</span>
+        </div>
+      </div>
+
+      <div class="sensor-box ph-sensor">
+        <div class="sensor-header">
+          <i class="bi bi-water sensor-icon"></i>
+          <div class="sensor-info">
+            <h3>pH Level</h3>
+            <div class="sensor-status status-normal">Neutral</div>
+          </div>
+        </div>
+        <div class="sensor-value">
+          <span class="value" id="ph-value">7.1</span>
+          <span class="unit">pH</span>
+        </div>
+        <div class="ph-scale">
+          <div class="ph-indicator" style="left: 71%"></div>
+          <div class="ph-labels">
+            <span>Acidic</span>
+            <span>Neutral</span>
+            <span>Basic</span>
+          </div>
+        </div>
+        <div class="sensor-range">
+          <span class="range-label">Safe Range: 6.5-7.5 pH</span>
+        </div>
+      </div>
+
+      <div class="sensor-box turbidity-sensor">
+        <div class="sensor-header">
+          <i class="bi bi-droplet sensor-icon"></i>
+          <div class="sensor-info">
+            <h3>Turbidity</h3>
+            <div class="sensor-status status-warning">Moderate</div>
+          </div>
+        </div>
+        <div class="sensor-value">
+          <span class="value" id="turbidity-value">24</span>
+          <span class="unit">NTU</span>
+        </div>
+        <div class="turbidity-visual">
+          <div class="water-clarity" id="water-clarity"></div>
+        </div>
+        <div class="sensor-range">
+          <span class="range-label">Clear Water: &lt;10 NTU</span>
+        </div>
+      </div>
+
+      <div class="sensor-box battery-sensor">
+        <div class="sensor-header">
+          <i class="bi bi-battery-charging sensor-icon"></i>
+          <div class="sensor-info">
+            <h3>Battery Level</h3>
+            <div class="sensor-status status-normal">Good</div>
+          </div>
+        </div>
+        <div class="sensor-value">
+          <span class="value" id="battery-value">77</span>
+          <span class="unit">%</span>
+        </div>
+        <div class="battery-visual">
+          <div class="battery-container">
+            <div class="battery-fill" id="battery-fill" style="width: 77%"></div>
+          </div>
+        </div>
+        <div class="sensor-range">
+          <span class="range-label">Est. Runtime: 18 hours</span>
+        </div>
+      </div>
+
+      <div class="sensor-box gas-sensor">
+        <div class="sensor-header">
+          <i class="bi bi-wind sensor-icon"></i>
+          <div class="sensor-info">
+            <h3>Gas Detection</h3>
+            <div class="sensor-status status-safe">Safe</div>
+          </div>
+        </div>
+        <div class="sensor-value">
+          <span class="value" id="gas-value">No Leak</span>
+        </div>
+        <div class="gas-indicator">
+          <div class="gas-status safe" id="gas-status-indicator"></div>
+          <span class="gas-level">Level: 0 ppm</span>
+        </div>
+        <div class="sensor-range">
+          <span class="range-label">Last Scan: <span id="gas-last-scan">2 min ago</span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Data Summary Section -->
+    <div class="data-summary">
+      <div class="summary-card">
+        <h4>System Performance</h4>
+        <div class="performance-metrics">
+          <div class="metric">
+            <span class="metric-label">Uptime</span>
+            <span class="metric-value">99.8%</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Data Points</span>
+            <span class="metric-value">12,847</span>
+          </div>
+          <div class="metric">
+            <span class="metric-label">Alerts</span>
+            <span class="metric-value">0</span>
+          </div>
+        </div>
+      </div>
+      <div class="summary-card">
+        <h4>Water Quality Index</h4>
+        <div class="wqi-score">
+          <div class="wqi-circle">
+            <span class="wqi-value">85</span>
+            <span class="wqi-label">Good</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GPS Mapping Section -->
+<section class="gps-section">
+  <div class="container">
+    <div class="gps-header">
+      <h2>Real-Time GPS Navigation</h2>
+      <p>Track Jalmitra's live location for waterway cleanup operations</p>
+      <div class="gps-controls">
+        <button class="control-btn">
+          <i class="bi bi-geo-alt"></i> Center Map
+        </button>
+        <button class="control-btn">
+          <i class="bi bi-fullscreen"></i> Fullscreen
+        </button>
+      </div>
+    </div>
+
+    <div class="gps-container">
+      <div id="gps-map">
+        <div class="map-placeholder">
+          <i class="bi bi-geo-alt-fill"></i>
+          <h3>GPS Map Loading...</h3>
+          <p>Integrate your map engine here</p>
+          <div class="coordinates">
+            <span>Lat: 22.3072° N</span>
+            <span>Long: 70.8022° E</span>
+          </div>
+        </div>
+      </div>
+      <div class="location-info">
+        <h4>Current Location</h4>
+        <p><i class="bi bi-geo-alt"></i> Rajkot, Gujarat, India</p>
+        <p><i class="bi bi-speedometer2"></i> Speed: 2.5 km/h</p>
+        <p><i class="bi bi-compass"></i> Heading: North-East</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+  <div class="container footer-container">
+    <div class="footer-section">
+      <h4>JalMitra</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="live.html">live Data</a></li>
+        <li><a href="contact.html">contact</a></li>
+        <li><a href="about.html">About Us</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section">
+      <h4>Contact</h4>
+      <p><strong>General Enquiries:</strong></p>
+      <p>
+        <img src="asset\email_icon.jpg" alt="email icon" class="icon-email" />
+        <a href="mailto:jalmitra1@outlook.com">jalmitra1@outlook.com</a>
+      </p>
+    </div>
+
+    <div class="footer-section">
+      <h4>Follow Us</h4>
+      <ul>
+        <li><a href="https://www.linkedin.com/in/jal-mitra-a41512374/">LinkedIn</a></li>
+        <li><a href="#">Facebook</a></li>
+        <li><a href="https://www.instagram.com/jalmitra1/">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script src="javascript/live.js"></script>
+</body>
+</html>
