@@ -8,7 +8,6 @@ const path = require('path');
 require('dotenv').config();
 
 
-kjn
 
 const app = express();
 app.use(express.json());
