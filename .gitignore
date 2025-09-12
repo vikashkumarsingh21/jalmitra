@@ -1,30 +1,44 @@
-# Python compiled files
-__pycache__/
-*.py[cod]
-*$py.class
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
-# Virtual environments
-venv/
-.env/
-.venv/
-
-# Environment variables file
+# Environment variables
 .env
+.env.test
+.env.production
+.env.local
 
-# Distribution / packaging
-build/
+# Build output
 dist/
-*.egg-info/
-*.egg
+build/
+.cache/
+.next/
+out/
+.tmp/
+coverage/
 
-# Logs and databases
+# Logs
+logs
 *.log
-*.sqlite3
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
 
 # IDE / editor settings
 .vscode/
 .idea/
+*.swp
+*.swo
 
-# macOS and Windows system files
-.DS_Store
-Thumbs.db
+# Misc
+*.tgz
