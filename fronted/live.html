@@ -6,7 +6,9 @@
   <title>Live Data | Jalmitra</title>
   <link rel="stylesheet" href="css/live.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
+  
+  <!-- ✅ Mapbox CSS -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.css" rel="stylesheet">
 
 
 </head>
@@ -211,9 +213,9 @@
       <div class="summary-card">
         <h4>System Performance</h4>
         <div class="performance-metrics">
-          <div class="metric">
+          <div class="metric">                               
             <span class="metric-label">Uptime</span>
-            <span class="metric-value">99.8%</span>
+            <span class="metric-value">99.8%</span>            
           </div>
           <div class="metric">
             <span class="metric-label">Data Points</span>
@@ -259,7 +261,7 @@
         <div class="map-placeholder">
           <i class="bi bi-geo-alt-fill"></i>
           <h3>GPS Map Loading...</h3>
-          <p>Integrate your map engine here</p>
+          <p>Integrate your map engine here</p> 
           <div class="coordinates">
             <span>Lat: 22.3072° N</span>
             <span>Long: 70.8022° E</span>
@@ -281,7 +283,7 @@
   <!-- Footer -->
   <footer class="main-footer">
   <div class="container footer-container">
-    <div class="footer-section">
+    <div class="footer-section">                   
       <h4>JalMitra</h4>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -310,6 +312,21 @@
     </div>
   </div>
 </footer>
+
+<!-- Mapbox JS -->
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.15.0/mapbox-gl.js"></script>
+
+  Map Initialization 
+  <script>
+    mapboxgl.accessToken = "MAP_BOX" ;
+
+    const map = new mapboxgl.Map({
+      container: 'gps-map', 
+      style: 'mapbox://styles/mapbox/streets-v12',      
+       center: [70.8022, 22.3072], 
+        zoom: 9 
+    }); 
+  </script>
 
 <script src="javascript/live.js"></script>
 </body>
